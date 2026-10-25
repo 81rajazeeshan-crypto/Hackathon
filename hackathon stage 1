@@ -1,0 +1,58 @@
+import pandas as pd
+
+# Sabse pehle files load karein
+applications_df = pd.read_csv('data-hackathon-main/applications.csv')
+punches_df = pd.read_csv('data-hackathon-main/biometric_punches.csv')
+
+# Ab missing values check karein
+print("--- Applications Missing Values ---")
+print(applications_df.isnull().sum())
+
+print("\n--- Biometric Punches Missing Values ---")
+print(punches_df.isnull().sum())
+# Text columns ko trim karein taake extra spaces khatam ho jayein
+for col in ['application_id', 'candidate_id', 'job_req_id', 'dept_id', 'stage']:
+    applications_df[col] = applications_df[col].astype(str).str.strip()
+
+for col in ['punch_id', 'device_id']:
+    punches_df[col] = punches_df[col].astype(str).str.strip()
+
+# Dates ko proper format mein convert karein
+applications_df['stage_date'] = pd.to_datetime(applications_df['stage_date'])
+punches_df['punch_time'] = pd.to_datetime(punches_df['punch_time'])
+
+print("Data standardization successfully mukammal ho gayi hai!")
+print(applications_df.info())
+print(punches_df.info())
+# Cleaned data ko nayi CSV files mein save kar lein
+applications_df.to_csv('cleaned_applications.csv', index=False)
+punches_df.to_csv('cleaned_biometric_punches.csv', index=False)
+
+print("Cleaned data successfully save ho gaya hai!")
+# Cleaned files ko load karein aur check karein
+import pandas as pd
+
+applications_df = pd.read_csv('cleaned_applications.csv')
+punches_df = pd.read_csv('cleaned_biometric_punches.csv')
+
+print("--- Basic Metrics ---")
+print(f"Total Applications Rows: {len(applications_df)}")
+print(f"Total Unique Candidates: {applications_df['candidate_id'].nunique()}")
+print(f"Total Biometric Punches: {len(punches_df)}")
+# Recruitment stages ka breakdown check karein
+stage_counts = applications_df['stage'].value_counts()
+
+print("\n--- Recruitment Stages Breakdown ---")
+print(stage_counts)
+# Department-wise applications breakdown
+dept_counts = applications_df['dept_id'].value_counts()
+
+print("\n--- Department-wise Applications Breakdown ---")
+print(dept_counts)
+# Biometric devices ka breakdown check karein
+device_counts = punches_df['device_id'].value_counts()
+unique_punch_users = punches_df['device_user_id'].nunique()
+
+print("\n--- Biometric Device Breakdown ---")
+print(device_counts)
+print(f"\nTotal Unique Punch Users: {unique_punch_users}")
