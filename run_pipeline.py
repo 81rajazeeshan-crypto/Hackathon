@@ -77,5 +77,3 @@ cfo_text = """# CFO Findings & Recommendations
 with open("presentation/cfo_findings.md", "w", encoding="utf-8") as f:
     f.write(cfo_text)
 
-print("\nSabhi folders aur files successfully generate ho gayi hain!")
-print("Ab aap terminal mein 'git add .', 'git commit -m \"Complete Hackathon Solution\"', aur 'git push' karke link LMS par submit kar sakte hain!")
